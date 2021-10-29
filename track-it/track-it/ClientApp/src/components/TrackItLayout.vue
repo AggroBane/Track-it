@@ -1,9 +1,14 @@
 <template>
   <div>
-    <p class="font-medium">{{ something }}</p>
     <router-view/>
   </div>
 </template>
+<style>
+body, html {
+  height: 100%;
+  width: 100%;
+}
+</style>
 
 <script>
 export default {

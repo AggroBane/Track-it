@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,14 +22,12 @@ namespace track_it.Controllers
             _context = context;
         }
 
-        //[HttpGet]
-        //public async Task<List<User>> Get()
-        //{
-        //    _context.Users.Add(new User() { Id = "test" });
-        //    await _context.SaveChangesAsync();
-
-        //    return _context.Users.ToList();
-        //}
+        [HttpGet]
+        [Route("{serialId}")]
+        public List<Tracker> Get([FromRoute] string serialId)
+        {
+            return _context.Trackers.Where(x => x.Id == serialId).ToList();
+        }
 
         [HttpPost("")]
         public async Task<IActionResult> Index()
