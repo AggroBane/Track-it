@@ -2,8 +2,6 @@
     <header>
         <Reveal>
             <router-link :to="{ name: 'Home' }" class="nav-link">Home</router-link>
-            <router-link :to="{ name: 'Counter' }" class="nav-link">Counter</router-link>
-            <router-link :to="{ name: 'FetchData' }" class="nav-link">Fetch Data</router-link>
             <router-link :to="{ name: 'Map' }" class="nav-link">Map</router-link>
         </Reveal>
     </header>
