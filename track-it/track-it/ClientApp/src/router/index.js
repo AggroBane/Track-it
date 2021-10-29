@@ -3,6 +3,7 @@ import Home from "@/components/Home.vue";
 import Counter from "@/components/Counter.vue";
 import FetchData from "@/components/FetchData.vue";
 import Map from "@/components/Map.vue";
+import TrackItLayout from "../components/TrackItLayout";
 
 const routes = [
     {
@@ -24,6 +25,11 @@ const routes = [
         path: "/Map",
         name: "Map",
         component: Map,
+    },
+    {
+        path: "/trackit",
+        name: "TrackItApp",
+        component: TrackItLayout
     }
 ];
 

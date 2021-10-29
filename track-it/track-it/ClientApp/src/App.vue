@@ -1,15 +1,14 @@
 <template>
-  <nav-menu></nav-menu>
-  <router-view />
+  <track-it-layout/>
 </template>
 
 <script>
-    import NavMenu from './components/NavMenu.vue'
+import TrackItLayout from "./components/TrackItLayout";
 
 export default {
   name: 'App',
   components: {
-      NavMenu
+    TrackItLayout
   }
 }
 </script>
