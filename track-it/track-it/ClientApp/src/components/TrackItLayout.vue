@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p class="font-medium">{{ something }}</p>
     <router-view/>
   </div>
 </template>

@@ -1,3 +1,3 @@
 export default {
-    currentUser: "user"
+    currentUser: "gamer"
 }
