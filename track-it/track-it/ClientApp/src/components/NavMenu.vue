@@ -1,39 +1,13 @@
 <template>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand">Vue JS Template for .NET 5</a>
-                <button class="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target=".navbar-collapse"
-                        aria-label="Toggle navigation"
-                        @click="toggle">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-                     v-bind:class="{show: isExpanded}">
-                    <ul class="navbar-nav flex-grow">
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'Home' }" class="nav-link text-dark">Home</router-link>
-                           
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'Counter' }" class="nav-link text-dark">Counter</router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'FetchData' }" class="nav-link text-dark">Fetch Data</router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'Map' }" class="nav-link text-dark">Map</router-link>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <Slide>
+            <router-link :to="{ name: 'Home' }" class="nav-link">Home</router-link>
+            <router-link :to="{ name: 'Counter' }" class="nav-link">Counter</router-link>
+            <router-link :to="{ name: 'FetchData' }" class="nav-link">Fetch Data</router-link>
+            <router-link :to="{ name: 'Map' }" class="nav-link">Map</router-link>
+        </Slide>
     </header>
 </template>
-
 
 <style>
     a.navbar-brand {
@@ -57,8 +31,13 @@
     }
 </style>
 <script>
+    import { Slide } from 'vue3-burger-menu'  // import the CSS transitions you wish to use, in this case we are using `Slide`
+
     export default {
         name: "NavMenu",
+        components: {
+            Slide // Register your component
+        },
         data() {
             return {
                 isExpanded: false
