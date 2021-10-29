@@ -19,12 +19,10 @@ namespace track_it.Controllers
         }
 
         [HttpGet]
-        public async Task<List<User>> Get()
+        [Route("{serialId}")]
+        public List<Tracker> Get([FromRoute] string serialId)
         {
-            _context.Users.Add(new User() { Id = "test" });
-            await _context.SaveChangesAsync();
-
-            return _context.Users.ToList();
+            return _context.Trackers.Where(x => x.Id == serialId).ToList();
         }
     }
 }
