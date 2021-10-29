@@ -16,16 +16,16 @@
         word-break: break-all;
     }
     .bm-burger-button {
-      position: absolute;
-      z-index:10;
-      width: 36px;
-      height: 30px;
-      left: 36px;
-      top: 70px;
-      cursor: pointer;
+        position: absolute;
+        z-index:10;
+        width: 36px;
+        height: 30px;
+        left: 25px;
+        top: 20px;
+        cursor: pointer;
     }
     .bm-burger-button:hover {
-        filter: brightness(150%);
+        filter: brightness(175%);
     }
     .bm-cross-button {
         margin-right:25%;

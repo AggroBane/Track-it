@@ -1,22 +1,31 @@
 <template>
-  <GoogleMap
+  <GoogleMap id="map"
       :api-key="apiKey"
       :center="somePoint"
       :zoom="15"
-      style="width: 100%; height: 500px"
-      styles="dark">
+      style="width: 100%;"
+      :style="{height: myheight}">
     <Marker v-for="point in manyPoints" :key="point.lat" :options="{position: point}" @click="scream(point.title)"/>
   </GoogleMap>
 </template>
+
+<style>
+.gmnoprint{
+    margin-top: 65% !important;
+}
+</style>
+
+
 <script>
 import {GoogleMap, Marker} from "vue3-google-map";
+import $ from 'jquery';
 
 export default {
   name: "Maps", components: {GoogleMap, Marker},
   data() {
     return {
       somePoint: {lat: 46.6120085, lng: -71.1074071},
-      manyPoints: []
+      manyPoints: [],
     }
   },
   mounted() {
@@ -38,10 +47,10 @@ export default {
   computed: {
     apiKey() {
       return process.env.VUE_APP_GOOGLE_API_KEY;
+    },
+    myheight() {
+      return $(window).height() + 'px';
     }
   }
-}
+};
 </script>
-<style>
-
-</style>
