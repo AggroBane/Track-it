@@ -5,6 +5,7 @@
         KEY,
         CAR,
         BIKE,
-        PET
+        PET,
+        PHONE
     }
 }
