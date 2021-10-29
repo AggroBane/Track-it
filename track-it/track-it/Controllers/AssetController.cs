@@ -1,19 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using track_it.Data;
 using track_it.Entities;
 
 namespace track_it.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/[controller]")]
     public class AssetController : ControllerBase
     {
-        [HttpGet]
-        [Route("/asset")]
-        public Asset Get()
+        private readonly AppDbContext _context;
+
+        public AssetController(AppDbContext context)
         {
-            return new Asset();
+            _context = context;
+        }
+
+        [HttpGet]
+        [Route("{userId}")]
+        public List<Asset> Get([FromRoute] string userId)
+        {
+            return _context.Assets.Where(x => x.UserId == userId).ToList();
         }
     }
 }
