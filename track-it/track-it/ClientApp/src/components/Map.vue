@@ -1,22 +1,14 @@
 <template>
-  <GmapMap
-    :center="{lat:10, lng:10}"
-    :zoom="7"
-    map-type-id="terrain"
-    style="width: 500px; height: 300px"
-  >
-    <GmapMarker
-      :key="index"
-      v-for="(m, index) in markers"
-      :position="m.position"
-      :clickable="true"
-      :draggable="true"
-      @click="center=m.position"
-    />
-  </GmapMap>  
+  <GoogleMap
+      :center="{lat: 40.689247, lng: -74.044502}"
+      :zoom="15"
+      style="width: 100%; height: 500px">
+  </GoogleMap>
 </template>
 <script>
-    export default {
-        name: "Maps"
-    }
+import {GoogleMap} from "vue3-google-map";
+
+export default {
+  name: "Maps", components: {GoogleMap}
+}
 </script>

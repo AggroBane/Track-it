@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1>This is the layout</h1>
-    <h2>{{ something }}</h2>
+    <p class="font-medium">{{ something }}</p>
     <router-view/>
   </div>
 </template>
