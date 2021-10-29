@@ -20,7 +20,8 @@
     "vue-loader-v16": "npm:vue-loader@^16.0.0-alpha.3",
     "vue-router": "^4.0.0-rc.5",
     "vue3-burger-menu": "^1.1.1",
-    "vue3-google-map": "^0.8.2"
+    "vue3-google-map": "^0.8.2",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.9",
