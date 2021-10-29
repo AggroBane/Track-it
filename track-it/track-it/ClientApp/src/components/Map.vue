@@ -8,6 +8,13 @@
     <Marker v-for="point in manyPoints" :key="point.lat" :options="{position: point}" @click="scream(point.title)"/>
   </GoogleMap>
 </template>
+
+<style>
+.gm-style-mtc {
+  display: none;
+}
+</style>
+
 <script>
 import {GoogleMap, Marker} from "vue3-google-map";
 
