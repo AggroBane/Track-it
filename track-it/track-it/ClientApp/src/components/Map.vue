@@ -5,7 +5,7 @@
       :zoom="15"
       style="width: 100%; height: 500px"
       styles="dark">
-    <Marker v-for="point in manyPoints" :key="point.lat" :options="{position: point}" @click=""/>
+    <Marker v-for="point in manyPoints" :key="point.lat" :options="{position: point}" @click="scream"/>
   </GoogleMap>
 </template>
 <script>
