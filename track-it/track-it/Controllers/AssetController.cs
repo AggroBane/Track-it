@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using track_it.Data;
 using track_it.Entities;
 
@@ -20,9 +19,9 @@ namespace track_it.Controllers
 
         [HttpGet]
         [Route("{userId}")]
-        public List<Asset> Get([FromRoute]string userId)
+        public List<Asset> Get([FromRoute] string userId)
         {
-            return _context.Assets.Where(x => x.Id == userId).ToList();
+            return _context.Assets.Where(x => x.UserId == userId).ToList();
         }
     }
 }
