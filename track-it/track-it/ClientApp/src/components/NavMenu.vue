@@ -24,6 +24,9 @@
                         <li class="nav-item">
                             <router-link :to="{ name: 'FetchData' }" class="nav-link text-dark">Fetch Data</router-link>
                         </li>
+                        <li class="nav-item">
+                            <router-link :to="{ name: 'Map' }" class="nav-link text-dark">Map</router-link>
+                        </li>
                     </ul>
                 </div>
             </div>
