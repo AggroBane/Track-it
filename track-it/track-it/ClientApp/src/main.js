@@ -2,10 +2,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-const VueGoogleMaps = require('vue2-google-maps');
+//const VueGoogleMaps = require('vue2-google-maps');
 
-const app = createApp(App).use(router).mount('#app');
-app.use(VueGoogleMaps, {
+const app = createApp(App);
+app.use(router);
+/*app.use(VueGoogleMaps, {
     load: {
         key: process.env.VUE_APP_GOOGLE_API_KEY,
         libraries: 'places', // This is required if you use the Autocomplete plugin
@@ -29,7 +30,7 @@ app.use(VueGoogleMaps, {
     //// then set installComponents to 'false'.
     //// If you want to automatically install all the components this property must be set to 'true':
     installComponents: true
-});
+});*/
 
 app.config.devtools = true;
-app.use(router).mount('#app');
+app.mount('#app');
