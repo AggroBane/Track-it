@@ -19,7 +19,7 @@
     </div>
      <router-link class="no-style" :to="{ name: 'Map', query:{trackerId: asset.id, reload:true}}">
     <img class="flex-item" :src="'https://www.mapquestapi.com/staticmap/v5/map?'+
-      'key=FajS1lvGMdqN1HyNfTrdiAM8KIQziNqr&'+
+      'key=' + process.env.VUE_APP_MAPQUEST_API_KEY + '&'+
       'center=' + asset.tracker.lat + ',' + asset.tracker.lng + 
       '&zoom=12&size=1200,800&'+
       'locations=' + asset.tracker.lat + ',' + asset.tracker.lng + '|marker-lg-red'
