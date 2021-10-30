@@ -11,7 +11,10 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -35,6 +38,18 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 
 public class FirstFragment extends Fragment {
     private final String username = "gamer";
@@ -72,12 +87,14 @@ public class FirstFragment extends Fragment {
     private void AskLocationPermission(Context context) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setMessage("The GPS needs to be enabled. Allow GPS access ?").setCancelable(false).setPositiveButton(Html.fromHtml("<font color='" + successTextColor + "'>Allow</font>"), new DialogInterface.OnClickListener() {
+        builder.setMessage("The GPS needs to be enabled. Allow GPS and Internet access ?").setCancelable(false).setPositiveButton(Html.fromHtml("<font color='" + successTextColor + "'>Allow</font>"), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1);
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.INTERNET, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION}, 1);
 
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                        ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                        ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
                 {
                     AskLocationPermission(getContext());
                 }
@@ -109,11 +126,13 @@ public class FirstFragment extends Fragment {
 
         Animation rotateAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_anim);
 
-        ActivityCompat.requestPermissions(getActivity(), new String[]{ Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION }, 1);
+        ActivityCompat.requestPermissions(getActivity(), new String[]{ Manifest.permission.INTERNET, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION }, 1);
 
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
         {
             AskLocationPermission(getContext());
         }
@@ -122,7 +141,10 @@ public class FirstFragment extends Fragment {
                 @Override
                 public void onLocationChanged(final Location location) {
                     currentLocation = location;
-                    SendLocation();
+
+                    try {
+                        SendLocation();
+                    } catch (Exception e) { /* "Handles error" */ }
                 }
 
                 @Override
@@ -136,8 +158,7 @@ public class FirstFragment extends Fragment {
                 }
 
                 @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                }
+                public void onStatusChanged(String provider, int status, Bundle extras) { }
             };
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, locationRefreshInterval, 0, locationListener);
@@ -208,28 +229,60 @@ public class FirstFragment extends Fragment {
             public void onClick(View v) {
                 if (!providerEnabled ||
                         ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                        ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                        ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                        ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
                 {
                     ShowSnackBar(v, "LOCATION DISABLED", errorTextColor);
                 }
                 else
                 {
-                    SendLocation();
-                    ShowSnackBar(v, "POSITION SENT", successTextColor);
+                    try {
+                        SendLocation();
+                        ShowSnackBar(v, "POSITION SENT", successTextColor);
+                    } catch(Exception e) {
+                        ShowSnackBar(v, "CONNECTION ERROR", errorTextColor);
+                    }
                 }
             }
         });
     }
 
-    private void SendLocation()
-    {
+    private void SendLocation() {
         if (loggedIn)
         {
-            String latitude = String.valueOf(currentLocation.getLatitude());
-            String longitude = String.valueOf(currentLocation.getLongitude());
+            final String latitude = String.valueOf(currentLocation.getLatitude());
+            final String longitude = String.valueOf(currentLocation.getLongitude());
 
-            Log.i("test", "lat : " + latitude);
-            Log.i("test", "lng : " + longitude);
+            String deviceId = ""; // Currently generated from username
+
+            for (char i : username.toCharArray()) {
+                deviceId += String.valueOf((int)i);
+            }
+
+            final String finalDeviceId = deviceId;
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try  {
+                        String data = URLEncoder.encode("lat", "UTF-8") + "=" + URLEncoder.encode(latitude, "UTF-8");
+                        data += "&" + URLEncoder.encode("lmg", "UTF-8") + "=" + URLEncoder.encode(longitude, "UTF-8");
+
+                        URL url = new URL("http://track-it.aggroserver.tech/phone/" + finalDeviceId);
+
+                        URLConnection connection = url.openConnection();
+                        connection.setDoOutput(true);
+                        OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
+                        wr.write(data);
+                        wr.flush();
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            thread.start();
         }
     }
 }
