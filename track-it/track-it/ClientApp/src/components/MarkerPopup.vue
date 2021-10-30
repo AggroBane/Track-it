@@ -13,7 +13,7 @@
 import {defaultImages, trackerTypeEnum} from "../assets/trackerDefaultImages";
 
 export default {
-  name: "SmolPopup",
+  name: "MarkerPopup",
   props: {
     asset: {
       type: Object,
@@ -22,7 +22,6 @@ export default {
   },
   computed: {
     trackerImage() {
-      // TODO make this use actual images
       if (this.asset.imageUrl) return this.asset.imageUrl;
       else return defaultImages[this.asset.type] !== undefined ? defaultImages[this.asset.type] : defaultImages[trackerTypeEnum.DEFAULT];
     }

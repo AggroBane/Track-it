@@ -13,5 +13,8 @@ export default {
         } else {
             state.dev_env = (value === 'true');
         }
+    },
+    setReady(state, value) {
+        state.ready = value;
     }
 }
