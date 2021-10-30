@@ -3,6 +3,7 @@ import Home from "@/components/Home.vue";
 import Map from "@/components/Map.vue";
 import TrackItLayout from "../components/TrackItLayout";
 import Trackers from "../components/Trackers";
+import AddTracker from "../components/AddTracker";
 
 const routes = [
     {
@@ -24,6 +25,11 @@ const routes = [
         path: "/trackit",
         name: "TrackItApp",
         component: TrackItLayout
+    },
+    {
+        path: "/AddTracker",
+        name: "AddTracker",
+        component: AddTracker
     }
 ];
 
