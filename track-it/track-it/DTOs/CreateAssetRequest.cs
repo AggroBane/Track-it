@@ -7,6 +7,7 @@ namespace track_it.DTOs
         public string Id { get; set; }
         public AssetType Type { get; set; }
         public string UserId { get; set; }
+        public string ImageUrl { get; set; }
         public string TrackerId { get; set; }
     }
 }
