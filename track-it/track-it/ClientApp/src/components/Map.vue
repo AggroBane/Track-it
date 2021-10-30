@@ -46,17 +46,22 @@ export default {
   mounted() {
     //TODO poke backend for our points
     this.manyPoints = arrayToDictionary([
-      {lat: 46.6120085, lng: -71.1074071, name: "marker1"},
-      {lat: 47.6120085, lng: -70.1074071, name: "marker2"},
-      {lat: 48.6120085, lng: -72.1074071, name: "marker3"},
-      {lat: 45.6120085, lng: -73.1074071, name: "marker4"}
+      {lat: 46.6120085, lng: -71.1074071, name: "tracker1"},
+      {lat: 47.6120085, lng: -70.1074071, name: "tracker2"},
+      {lat: 48.6120085, lng: -72.1074071, name: "tracker3"},
+      {lat: 45.6120085, lng: -73.1074071, name: "tracker4"}
     ], 'name');
+    if(this.$route.query.trackerId && this.manyPoints[this.$route.query.trackerId])
+    {
+      this.markerClicked(this.$route.query.trackerId);
+    }
   },
   methods: {
     markerClicked(markerName) {
       //Reset the variables
       this.mapCenterPoint = {lat: 0, lng: 0};
       this.zoom = 0;
+      this.$router.push({ path: 'Map', query: { trackerId: markerName }});
 
       this.$nextTick(() => {
         this.mapCenterPoint = this.manyPoints[markerName];
