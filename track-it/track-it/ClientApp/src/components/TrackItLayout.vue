@@ -11,16 +11,28 @@ body, html {
 </style>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: "TrackItLayout",
   mounted() {
     // setting state
     this.$store.commit('setDevEnv', process.env.VUE_APP_DEV_ENV);
 
-
+    this.fetchAssets();
     // TODO poke backend to populate trackers
-    
-
+  },
+  methods: {
+    fetchAssets() {
+      axios.get(`/asset/${this.$store.state.currentUser}`)
+          .then((response) => {
+            this.$store.state.dev_env ? this.$toast.success('Fetched assets') : this.$toast.error('aaaaaaas');
+            this.$store.commit('setTrackers', response.data);
+          })
+          .catch(() => {
+            this.$toast.error('Something went wrong fetching assets');
+          });
+    }
   }
 }
 </script>
