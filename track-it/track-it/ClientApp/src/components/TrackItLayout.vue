@@ -24,9 +24,9 @@ export default {
   },
   methods: {
     fetchAssets() {
-      axios.get(`/asset/${this.$store.state.currentUser}`)
+      axios.get(`/user/${this.$store.state.currentUser}/assets`)
           .then((response) => {
-            this.$store.state.dev_env ? this.$toast.success('Fetched assets') : this.$toast.error('aaaaaaas');
+            this.$store.state.dev_env ? this.$toast.success('Fetched assets') : '';
             this.$store.commit('setTrackers', response.data);
           })
           .catch(() => {

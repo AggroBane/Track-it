@@ -20,13 +20,12 @@ export default {
   },
   computed: {
     trackerImage() {
-      let assetPath = '../assets';
       // TODO make this use actual images
       switch (this.asset.type) {
         case 1:
-          return `${assetPath}/logo.png`;
+          return `https://wpcdn.us-east-1.vip.tn-cloud.net/www.abc6.com/content/uploads/2021/04/f/j/eg-car-in-water-2-credit-iafflocal3328-1-1024x768.jpg`;
         default:
-          return `${assetPath}/trackitlogo.png`;
+          return `https://cdn.shopify.com/s/files/1/0250/3537/4674/products/582596d6d746e28b65b0aed958e49b4d_32958db2-332e-4018-a5e1-12d73614a90d.jpg?v=1594323451.png`;
       }
     }
   }
