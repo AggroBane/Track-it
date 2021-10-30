@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import {defaultImages, trackerTypeEnum} from "../assets/trackerDefaultImages";
+
 export default {
   name: "SmolPopup",
   props: {
@@ -21,12 +23,8 @@ export default {
   computed: {
     trackerImage() {
       // TODO make this use actual images
-      switch (this.asset.type) {
-        case 1:
-          return `https://wpcdn.us-east-1.vip.tn-cloud.net/www.abc6.com/content/uploads/2021/04/f/j/eg-car-in-water-2-credit-iafflocal3328-1-1024x768.jpg`;
-        default:
-          return `https://cdn.shopify.com/s/files/1/0250/3537/4674/products/582596d6d746e28b65b0aed958e49b4d_32958db2-332e-4018-a5e1-12d73614a90d.jpg?v=1594323451.png`;
-      }
+      if (this.asset.imageUrl) return this.asset.imageUrl;
+      else return defaultImages[this.asset.type] !== undefined ? defaultImages[this.asset.type] : defaultImages[trackerTypeEnum.DEFAULT];
     }
   }
 }
