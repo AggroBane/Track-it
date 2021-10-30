@@ -56,7 +56,7 @@ namespace track_it
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseVueCli(npmScript: "serve");
+                    spa.UseVueCli(npmScript: "serve", 8080);
                 }
 
             });
