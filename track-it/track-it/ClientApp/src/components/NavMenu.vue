@@ -3,6 +3,7 @@
         <Reveal>
             <router-link :to="{ name: 'Home' }" class="nav-link">Home</router-link>
             <router-link :to="{ name: 'Map' }" class="nav-link">Map</router-link>
+            <router-link :to="{ name: 'Trackers' }" class="nav-link">Trackers</router-link>
         </Reveal>
     </header>
 </template>
