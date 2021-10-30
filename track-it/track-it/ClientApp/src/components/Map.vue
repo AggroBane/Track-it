@@ -1,39 +1,50 @@
 <template>
-  <GoogleMap id="map"
-             ref="mapRef"
-             :api-key="apiKey"
-             :center="mapCenterPoint"
-             :style="{height: myheight}"
-             :zoom="zoom"
-             style="width: 100%;">
-    <Marker v-for="point in Object.values(manyPoints)" :key="point.lat" :options="{position: point}"
-            @click="markerClicked(point.name)"/>
-  </GoogleMap>
+  <div>
+    <GoogleMap id="map"
+               :api-key="apiKey"
+               :center="mapCenterPoint"
+               :scrollwheel="false"
+               :style="{height: myheight}"
+               :zoom="zoom"
+               style="width: 100%;"
+               @mousedown="showDetails = false">
+      <Marker v-for="point in Object.values(manyPoints)" :key="point.lat" :options="{position: point}"
+              @click="markerClicked(point.name)"/>
+    </GoogleMap>
+    <SmolPopup v-if="showDetails"
+               :tracker="mapCenterPoint"
+               style="position: fixed; top: 40%; left: 50%; z-index: 3; transform: translate(-50%, -50%);"/>
+  </div>
 </template>
 
 <style>
 .gmnoprint {
   margin-top: 65% !important;
 }
+
+.gm-svpc {
+  /* Hides the streetview button */
+  visibility: hidden;
+}
 </style>
 <script>
 import {GoogleMap, Marker} from "vue3-google-map";
 import $ from 'jquery';
 import {arrayToDictionary} from "../../store/utilities";
+import SmolPopup from "./SmolPopup";
 
 export default {
-  name: "Maps", components: {GoogleMap, Marker},
+  name: "Maps", components: {SmolPopup, GoogleMap, Marker},
   data() {
     return {
-      mapCenterPoint: {lat: 0, lng: 0},
-      zoom: 3,
-      somePoint: {lat: 46.6120085, lng: -71.1074071},
-      manyPoints: {},
+      mapCenterPoint: {lat: 46.6120085, lng: -71.1074071},
+      zoom: 5,
+      showDetails: false,
+      manyPoints: {}
     }
   },
   mounted() {
     //TODO poke backend for our points
-    this.mapCenterPoint = this.somePoint;
     this.manyPoints = arrayToDictionary([
       {lat: 46.6120085, lng: -71.1074071, name: "marker1"},
       {lat: 47.6120085, lng: -70.1074071, name: "marker2"},
@@ -47,10 +58,13 @@ export default {
       this.mapCenterPoint = {lat: 0, lng: 0};
       this.zoom = 0;
 
-
       this.$nextTick(() => {
         this.mapCenterPoint = this.manyPoints[markerName];
         this.zoom = 9;
+
+        setTimeout(() => {
+          this.showDetails = true;
+        }, 750);
       });
     }
   },
