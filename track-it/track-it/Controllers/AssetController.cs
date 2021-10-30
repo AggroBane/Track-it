@@ -40,7 +40,8 @@ namespace track_it.Controllers
                 Id = request.Id,
                 Tracker = tracker,
                 User = user,
-                Type = request.Type
+                Type = request.Type,
+                ImageUrl = request.ImageUrl
             };
 
             await _context.Assets.AddAsync(createdAsset);
@@ -74,6 +75,7 @@ namespace track_it.Controllers
             if (user != null) asset.User = user;
             if (tracker != null) asset.Tracker = tracker;
             if (request.Type != null) asset.Type = (AssetType)request.Type;
+            if (request.ImageUrl != null) asset.ImageUrl = request.ImageUrl;
 
             _context.Assets.Update(asset);
             await _context.SaveChangesAsync();
