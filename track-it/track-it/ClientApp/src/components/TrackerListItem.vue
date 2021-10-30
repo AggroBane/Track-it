@@ -20,7 +20,7 @@
       </div>
       <router-link :to="{ name: 'Map', query: { trackerId: asset.id }}" class="no-style">
         <img :src="'https://www.mapquestapi.com/staticmap/v5/map?'+
-      'key=' + apiKey + '&'+
+      'key=B6bq43LgCfyG8ZuWZe4kSuf4mdn72i3w&'+
       'center=' + asset.tracker.lat + ',' + asset.tracker.lng +
       '&zoom=12&size=1200,800&'+
       'locations=' + asset.tracker.lat + ',' + asset.tracker.lng + '|marker-lg-red'
