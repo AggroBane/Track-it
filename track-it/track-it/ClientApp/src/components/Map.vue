@@ -4,7 +4,7 @@
              :api-key="apiKey"
              :center="mapCenterPoint"
              :style="{height: myheight}"
-             :zoom="15"
+             :zoom="zoom"
              style="width: 100%;">
     <Marker v-for="point in Object.values(manyPoints)" :key="point.lat" :options="{position: point}"
             @click="markerClicked(point.name)"/>
@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       mapCenterPoint: {lat: 0, lng: 0},
+      zoom: 3,
       somePoint: {lat: 46.6120085, lng: -71.1074071},
       manyPoints: {},
     }
@@ -41,13 +42,16 @@ export default {
     ], 'name');
   },
   methods: {
-    scream(title) {
-      let iCry = "AAAAAAAAAAAAAAAAAAAAAAAA " + title;
-      console.log(iCry);
-      this.$toast.success(iCry, {position: 'top-right'});
-    },
     markerClicked(markerName) {
-      this.mapCenterPoint = this.manyPoints[markerName];
+      //Reset the variables
+      this.mapCenterPoint = {lat: 0, lng: 0};
+      this.zoom = 0;
+
+
+      this.$nextTick(() => {
+        this.mapCenterPoint = this.manyPoints[markerName];
+        this.zoom = 9;
+      });
     }
   },
   computed: {
