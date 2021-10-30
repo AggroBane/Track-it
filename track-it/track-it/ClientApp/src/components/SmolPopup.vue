@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import {defaultImages, trackerTypeEnum} from "../assets/trackerDefaultImages";
+
 export default {
   name: "SmolPopup",
   props: {
@@ -20,14 +22,9 @@ export default {
   },
   computed: {
     trackerImage() {
-      let assetPath = '../assets';
       // TODO make this use actual images
-      switch (this.asset.type) {
-        case 1:
-          return `${assetPath}/logo.png`;
-        default:
-          return `${assetPath}/trackitlogo.png`;
-      }
+      if (this.asset.imageUrl) return this.asset.imageUrl;
+      else return defaultImages[this.asset.type] !== undefined ? defaultImages[this.asset.type] : defaultImages[trackerTypeEnum.DEFAULT];
     }
   }
 }

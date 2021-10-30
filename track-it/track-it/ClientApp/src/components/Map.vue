@@ -19,7 +19,7 @@
 
 <style>
 .gmnoprint {
-  margin-top: 65% !important;
+  margin-top: 85vh !important;
 }
 
 .gm-svpc {
@@ -42,6 +42,12 @@ export default {
     }
   },
   mounted() {
+    console.log(this.manyPoints.trackers);
+    if(this.$route.query.reload === "true")
+    {
+        let url= window.location.href.replace("reload=true", "");
+        window.location.replace(url);
+    }
     if (this.$store.state.dev_env && Object.keys(this.manyPoints).length === 0) {
       this.$store.commit('setTrackers', [
         {tracker: {lat: 46.6120085, lng: -71.1074071}, id: "marker1"},
@@ -52,6 +58,7 @@ export default {
       ]);
       this.$toast.info('State was empty, populating map with random markers');
     }
+
     if(this.$route.query.trackerId && this.manyPoints[this.$route.query.trackerId])
     {
       this.markerClicked(this.$route.query.trackerId);
@@ -65,6 +72,7 @@ export default {
       this.$router.push({ path: 'Map', query: { trackerId: markerName }});
 
       this.$nextTick(() => {
+        console.log('tesst');
         this.mapCenterPoint = this.manyPoints[markerName];
         this.zoom = 9;
 

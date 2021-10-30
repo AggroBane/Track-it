@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using track_it.Data;
 using track_it.Entities;
@@ -29,8 +30,35 @@ namespace track_it.Controllers
             return _context.Trackers.Where(x => x.Id == serialId).ToList();
         }
 
+        [HttpDelete]
+        [Route("{serialId}")]
+        public async Task<IActionResult> Delete([FromRoute] string serialId)
+        {
+            var tracker = await _context.Trackers.FirstOrDefaultAsync(x => x.Id == serialId);
+
+            if (tracker != null)
+            {
+                _context.Trackers.Remove(tracker);
+                await _context.SaveChangesAsync();
+            }
+
+            return NoContent();
+        }
+
+
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> Create([FromBody] Tracker tracker)
+        {
+            if (tracker == null) return BadRequest();
+
+            await _context.Trackers.AddAsync(tracker);
+
+            return Created("tracker/" + tracker.Id, tracker);
+        }
+
         [HttpPost("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> GetDataFromGps()
         {
             try
             {
