@@ -1,5 +1,5 @@
 export const trackerTypeEnum = {
-    DEFAULT: -1,
+    DEFAULT: undefined,
     KEY: 0,
     CAR: 1,
     BIKE: 2,

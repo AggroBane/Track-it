@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-view/>
+    <router-view v-if="ready"/>
   </div>
 </template>
 <style>
@@ -15,12 +15,13 @@ import axios from 'axios'
 
 export default {
   name: "TrackItLayout",
-  async beforeMount() {
+  beforeMount() {
     // setting state
     this.$store.commit('setDevEnv', process.env.VUE_APP_DEV_ENV);
 
-    await this.fetchAssets();
-    // TODO poke backend to populate trackers
+    this.fetchAssets();
+
+    this.$store.commit('setReady', true);
   },
   methods: {
     fetchAssets() {
@@ -32,7 +33,12 @@ export default {
           .catch(() => {
             this.$toast.error('Something went wrong fetching assets');
           })
-      }
     }
+  },
+  computed: {
+    ready() {
+      return this.$store.state.ready;
+    }
+  }
 }
 </script>
