@@ -5,7 +5,7 @@ export default {
         state.currentUser = name;
     },
     setTrackers(state, trackerArray) {
-        state.trackers = arrayToDictionary(trackerArray, 'name');
+        state.trackers = arrayToDictionary(trackerArray, 'id');
     },
     setDevEnv(state, value) {
         if (typeof value == "boolean") {

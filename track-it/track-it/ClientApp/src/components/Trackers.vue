@@ -113,7 +113,7 @@ img.flex-item{
     data() {
       return {
         trackers: [{
-            id:"tracker1",
+            id:"marker1",
             name:"mon chien",
             img: "https://static.wikia.nocookie.net/dogelore/images/9/97/Doge.jpg",
             last_update:new Date(),
@@ -121,7 +121,7 @@ img.flex-item{
             lng: -71.1074071
           },
           { 
-            id:"tracker2",
+            id:"marker2",
             name:"mon chat",
             img: "https://cdn.vox-cdn.com/thumbor/MfAL89LfeltyZgd9Ra8C2iBjq3U=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/19539772/cats4.jpg",
             last_update:new Date(),
