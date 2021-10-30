@@ -55,7 +55,8 @@ namespace track_it.Controllers
                 Id = "Auto",
                 Type = AssetType.CAR,
                 Tracker = tracker,
-                User = user
+                User = user,
+                ImageUrl = ""
             });
 
             await _dbContext.SaveChangesAsync();

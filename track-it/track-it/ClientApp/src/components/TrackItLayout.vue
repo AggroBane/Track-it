@@ -15,11 +15,11 @@ import axios from 'axios'
 
 export default {
   name: "TrackItLayout",
-  mounted() {
+  async beforeMount() {
     // setting state
     this.$store.commit('setDevEnv', process.env.VUE_APP_DEV_ENV);
 
-    this.fetchAssets();
+    await this.fetchAssets();
     // TODO poke backend to populate trackers
   },
   methods: {
@@ -31,8 +31,8 @@ export default {
           })
           .catch(() => {
             this.$toast.error('Something went wrong fetching assets');
-          });
+          })
+      }
     }
-  }
 }
 </script>

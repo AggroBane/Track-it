@@ -1,8 +1,13 @@
+com/track_it/track_it_mobile/MainActivity.java
+ com.track_it.track_it_mobile.MainActivity
+com/track_it/track_it_mobile/BuildConfig.java
+ com.track_it.track_it_mobile.BuildConfig
 com/track_it/track_it_mobile/FirstFragment.java
  com.track_it.track_it_mobile.FirstFragment
  com.track_it.track_it_mobile.FirstFragment$1
  com.track_it.track_it_mobile.FirstFragment$2
-com/track_it/track_it_mobile/BuildConfig.java
- com.track_it.track_it_mobile.BuildConfig
-com/track_it/track_it_mobile/MainActivity.java
- com.track_it.track_it_mobile.MainActivity
+ com.track_it.track_it_mobile.FirstFragment$3
+ com.track_it.track_it_mobile.FirstFragment$4
+ com.track_it.track_it_mobile.FirstFragment$5
+ com.track_it.track_it_mobile.FirstFragment$6
+ com.track_it.track_it_mobile.FirstFragment$7
