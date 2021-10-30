@@ -15,7 +15,7 @@ const store = createStore({
         return state;
     },
     mutations
-})
+});
 
 const app = createApp(App);
 app.use(Toaster)
