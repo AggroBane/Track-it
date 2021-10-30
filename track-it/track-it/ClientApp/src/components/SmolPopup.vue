@@ -1,6 +1,6 @@
 <template>
   <div class="smolPopup">
-    <img src="../assets/trackitlogo.png" style="height: 4rem; width: 4rem;"/>
+    <img :src="trackerImage" style="height: 4rem; width: 4rem;"/>
     <div class="d-flex flex-column align-items-center h-100">
       <h3 style="font-size: 16px;">{{ tracker.name }}</h3>
       <p style="font-size: 12px;">Latitude: {{ tracker.lat }}</p>
@@ -20,11 +20,13 @@ export default {
   },
   computed: {
     trackerImage() {
+      let assetPath = '../assets';
+      // TODO make this use actual images
       switch (this.tracker.type) {
         case 'dog':
-          return 'dog.png';
+          return `${assetPath}/logo.png`;
         default:
-          return 'logo.png'
+          return `${assetPath}/trackitlogo.png`;
       }
     }
   }
