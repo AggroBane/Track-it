@@ -1,28 +1,28 @@
 <template>
-<div v-for="tracker in trackers" :key="tracker.id">
-  <button @click="listClick($event)" class="accordion">Tracker {{tracker.name}}</button>
+<div v-for="asset in trackers" :key="asset.id">
+  <button @click="listClick($event)" class="accordion">Tracker {{asset.id}}</button>
   <div class="panel">
     <div class="divimg">
-    <img class="flex-item" style="float:left; width:300px; height:300px;" :src="tracker.img">
+    <img class="flex-item" style="float:left; width:300px; height:300px;" :src="asset.tracker.imageurl">
     <div class="flex-item" style="text-align:left">
-      <p>id: {{tracker.id}}</p>
-      <p>Name: {{tracker.name}}</p>
-      <p>Last tracked at: {{tracker.last_update}}</p>
+      <p>id: {{asset.id}}</p>
+      <p>Name: {{asset.id}}</p>
+      <p>Last tracked at: {{asset.tracker.lastPingUtc}}</p>
       <p>Coordinates: (
-        <router-link class="no-style" :to="{ name: 'Map', query:{trackerId: tracker.id}}">
-            <span class="lat">{{tracker.lat}}</span>, 
-            <span class="lng">{{tracker.lng}}</span>
+        <router-link class="no-style" :to="{ name: 'Map', query:{trackerId: asset.id, reload:true}}">
+            <span class="lat">{{asset.tracker.lat}}</span>, 
+            <span class="lng">{{asset.tracker.lng}}</span>
         </router-link>
         )
       </p>
     </div>
     </div>
-     <router-link class="no-style" :to="{ name: 'Map', query:{trackerId: tracker.id}}">
+     <router-link class="no-style" :to="{ name: 'Map', query:{trackerId: asset.id, reload:true}}">
     <img class="flex-item" :src="'https://www.mapquestapi.com/staticmap/v5/map?'+
       'key=FajS1lvGMdqN1HyNfTrdiAM8KIQziNqr&'+
-      'center=' + tracker.lat + ',' + tracker.lng + 
+      'center=' + asset.tracker.lat + ',' + asset.tracker.lng + 
       '&zoom=12&size=1200,800&'+
-      'locations=' + tracker.lat + ',' + tracker.lng + '|marker-lg-red'
+      'locations=' + asset.tracker.lat + ',' + asset.tracker.lng + '|marker-lg-red'
       "> </router-link>
   </div>
 </div>
@@ -110,25 +110,29 @@ img.flex-item{
 <script>
   export default {
     name:"Trackers",
-    data() {
-      return {
-        trackers: [{
+    mounted() {
+      if (this.$store.state.dev_env && Object.keys(this.trackers).length === 0) {
+      this.$store.commit('setTrackers', [
+          {
             id:"marker1",
-            name:"mon chien",
-            img: "https://static.wikia.nocookie.net/dogelore/images/9/97/Doge.jpg",
-            last_update:new Date(),
-            lat: 46.6120085, 
-            lng: -71.1074071
+            tracker: {
+              imageurl: "https://static.wikia.nocookie.net/dogelore/images/9/97/Doge.jpg",
+              lastPingUtc:new Date(),
+              lat: 46.6120085, 
+              lng: -71.1074071
+            }
           },
           { 
             id:"marker2",
-            name:"mon chat",
-            img: "https://cdn.vox-cdn.com/thumbor/MfAL89LfeltyZgd9Ra8C2iBjq3U=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/19539772/cats4.jpg",
-            last_update:new Date(),
-            lat: 47.6120085, 
-            lng: -70.1074071
+            tracker:{
+              imageurl: "https://cdn.vox-cdn.com/thumbor/MfAL89LfeltyZgd9Ra8C2iBjq3U=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/19539772/cats4.jpg",
+              lastPingUtc:new Date(),
+              lat: 47.6120085, 
+              lng: -70.1074071
+            }
           }
-        ]
+      ]);
+      this.$toast.info('State was empty, populating map with random markers');
       }
     },
     methods: {
@@ -141,7 +145,14 @@ img.flex-item{
           } else {
             panel.style.maxHeight = "800px";
           }
-      },
+      }
+    },
+    computed: {
+      trackers() {
+        console.log(this.$store.state.trackers);
+        return this.$store.state.trackers;
+      }
     }
+
   }
 </script>
