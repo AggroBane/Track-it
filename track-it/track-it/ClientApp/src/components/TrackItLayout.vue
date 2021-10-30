@@ -13,10 +13,14 @@ body, html {
 <script>
 export default {
   name: "TrackItLayout",
-  data() {
-    return {
-      something: 'THIS IS DATAAAAA'
-    }
+  mounted() {
+    // setting state
+    this.$store.commit('setDevEnv', process.env.VUE_APP_DEV_ENV);
+
+
+    // TODO poke backend to populate trackers
+    
+
   }
 }
 </script>

@@ -1,3 +1,5 @@
 export default {
-    currentUser: "gamer"
+    currentUser: "gamer",
+    trackers: {},
+    dev_env: false
 }

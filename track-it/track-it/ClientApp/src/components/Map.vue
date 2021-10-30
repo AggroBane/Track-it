@@ -1,5 +1,6 @@
 <template>
   <div>
+    <button @click="updateState">Update State</button>
     <GoogleMap id="map"
                :api-key="apiKey"
                :center="mapCenterPoint"
@@ -30,7 +31,6 @@
 <script>
 import {GoogleMap, Marker} from "vue3-google-map";
 import $ from 'jquery';
-import {arrayToDictionary} from "../../store/utilities";
 import SmolPopup from "./SmolPopup";
 
 export default {
@@ -40,17 +40,17 @@ export default {
       mapCenterPoint: {lat: 46.6120085, lng: -71.1074071},
       zoom: 5,
       showDetails: false,
-      manyPoints: {}
+      trackerarray: []
     }
   },
   mounted() {
     //TODO poke backend for our points
-    this.manyPoints = arrayToDictionary([
+    this.trackerarray = [
       {lat: 46.6120085, lng: -71.1074071, name: "marker1"},
       {lat: 47.6120085, lng: -70.1074071, name: "marker2"},
       {lat: 48.6120085, lng: -72.1074071, name: "marker3"},
       {lat: 45.6120085, lng: -73.1074071, name: "marker4"}
-    ], 'name');
+    ];
   },
   methods: {
     markerClicked(markerName) {
@@ -66,6 +66,9 @@ export default {
           this.showDetails = true;
         }, 750);
       });
+    },
+    updateState() {
+      this.$store.commit('setTrackers', this.trackerarray);
     }
   },
   computed: {
@@ -74,6 +77,9 @@ export default {
     },
     myheight() {
       return $(window).height() + 'px';
+    },
+    manyPoints() {
+      return this.$store.state.trackers;
     }
   }
 };
