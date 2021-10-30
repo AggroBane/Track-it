@@ -27,9 +27,27 @@
   </div>
 </div>
 <hr style="margin: 0px;">
+<button @click="$router.push('AddTracker')" class="kc_fab_main_btn">+</button>
 </template>
 
 <style>
+.kc_fab_main_btn {
+  position: fixed; 
+  right: 5%;
+  bottom:5vh;
+  background-color: #F44336;
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  background: #F44336;
+  border: none;
+  outline: none;
+  color: #FFF;
+  font-size: 36px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  transition: .3s;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
 .imgTracker {
   float:left; 
   width:300px; 
