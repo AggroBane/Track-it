@@ -1,10 +1,10 @@
 <template>
   <div class="smolPopup">
-    <img src="../assets/trackitlogo.png" style="height: 4rem; width: 4rem;"/>
+    <img :src="trackerImage" style="height: 4rem; width: 4rem;"/>
     <div class="d-flex flex-column align-items-center h-100">
-      <h3 style="font-size: 16px;">{{ tracker.name }}</h3>
-      <p style="font-size: 12px;">Latitude: {{ tracker.lat }}</p>
-      <p style="font-size: 12px;">Longitude: {{ tracker.lng }}</p>
+      <h3 style="font-size: 16px;">{{ asset.id }}</h3>
+      <p style="font-size: 12px;">Latitude: {{ asset.tracker.lat }}</p>
+      <p style="font-size: 12px;">Longitude: {{ asset.tracker.lng }}</p>
     </div>
   </div>
 </template>
@@ -13,18 +13,20 @@
 export default {
   name: "SmolPopup",
   props: {
-    tracker: {
+    asset: {
       type: Object,
       required: true
     }
   },
   computed: {
     trackerImage() {
-      switch (this.tracker.type) {
-        case 'dog':
-          return 'dog.png';
+      let assetPath = '../assets';
+      // TODO make this use actual images
+      switch (this.asset.type) {
+        case 1:
+          return `${assetPath}/logo.png`;
         default:
-          return 'logo.png'
+          return `${assetPath}/trackitlogo.png`;
       }
     }
   }

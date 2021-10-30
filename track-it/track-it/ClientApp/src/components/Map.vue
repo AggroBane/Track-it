@@ -2,17 +2,17 @@
   <div>
     <GoogleMap id="map"
                :api-key="apiKey"
-               :center="mapCenterPoint"
+               :center="mapCenterPoint.tracker"
                :scrollwheel="false"
                :style="{height: myheight}"
                :zoom="zoom"
                style="width: 100%;"
                @mousedown="showDetails = false">
-      <Marker v-for="point in Object.values(manyPoints)" :key="point.lat" :options="{position: point}"
-              @click="markerClicked(point.name)"/>
+      <Marker v-for="point in Object.values(manyPoints)" :key="point.id" :options="{position: point.tracker}"
+              @click="markerClicked(point.id)"/>
     </GoogleMap>
     <SmolPopup v-if="showDetails"
-               :tracker="mapCenterPoint"
+               :asset="mapCenterPoint"
                style="position: fixed; top: 40%; left: 50%; z-index: 3; transform: translate(-50%, -50%);"/>
   </div>
 </template>
@@ -30,33 +30,39 @@
 <script>
 import {GoogleMap, Marker} from "vue3-google-map";
 import $ from 'jquery';
-import {arrayToDictionary} from "../../store/utilities";
 import SmolPopup from "./SmolPopup";
 
 export default {
   name: "Maps", components: {SmolPopup, GoogleMap, Marker},
   data() {
     return {
-      mapCenterPoint: {lat: 46.6120085, lng: -71.1074071},
+      mapCenterPoint: {tracker: {lat: 46.6120085, lng: -71.1074071}},
       zoom: 5,
-      showDetails: false,
-      manyPoints: {}
+      showDetails: false
     }
   },
   mounted() {
-    //TODO poke backend for our points
-    this.manyPoints = arrayToDictionary([
-      {lat: 46.6120085, lng: -71.1074071, name: "marker1"},
-      {lat: 47.6120085, lng: -70.1074071, name: "marker2"},
-      {lat: 48.6120085, lng: -72.1074071, name: "marker3"},
-      {lat: 45.6120085, lng: -73.1074071, name: "marker4"}
-    ], 'name');
+    if (this.$store.state.dev_env && Object.keys(this.manyPoints).length === 0) {
+      this.$store.commit('setTrackers', [
+        {tracker: {lat: 46.6120085, lng: -71.1074071}, id: "marker1"},
+        {tracker: {lat: 47.6120085, lng: -70.1074071}, id: "marker2"},
+        {tracker: {lat: 46.3120085, lng: -72.1074071}, id: "marker3"},
+        {tracker: {lat: 46.8120085, lng: -71.2074071}, id: "marker4"},
+        {tracker: {lat: 46.3120085, lng: -71.1074071}, id: "marker5"}
+      ]);
+      this.$toast.info('State was empty, populating map with random markers');
+    }
+    if(this.$route.query.trackerId && this.manyPoints[this.$route.query.trackerId])
+    {
+      this.markerClicked(this.$route.query.trackerId);
+    }
   },
   methods: {
     markerClicked(markerName) {
       //Reset the variables
-      this.mapCenterPoint = {lat: 0, lng: 0};
+      this.mapCenterPoint = {tracker: {lat: 0, lng: 0}};
       this.zoom = 0;
+      this.$router.push({ path: 'Map', query: { trackerId: markerName }});
 
       this.$nextTick(() => {
         this.mapCenterPoint = this.manyPoints[markerName];
@@ -74,6 +80,9 @@ export default {
     },
     myheight() {
       return $(window).height() + 'px';
+    },
+    manyPoints() {
+      return this.$store.state.trackers;
     }
   }
 };

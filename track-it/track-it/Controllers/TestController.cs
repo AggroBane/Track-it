@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using track_it.Data;
 using track_it.Entities;
@@ -27,6 +28,11 @@ namespace track_it.Controllers
         public async Task<IActionResult> SeedDb()
         {
             if (!_env.IsDevelopment()) return NotFound();
+
+            if ((await _dbContext.Assets.CountAsync()) > 0) _dbContext.Assets.RemoveRange(_dbContext.Assets);
+            if ((await _dbContext.Trackers.CountAsync()) > 0) _dbContext.Trackers.RemoveRange(_dbContext.Trackers);
+            if ((await _dbContext.Users.CountAsync()) > 0) _dbContext.Users.RemoveRange(_dbContext.Users);
+            await _dbContext.SaveChangesAsync();
 
             var user = new User()
             {
@@ -54,7 +60,7 @@ namespace track_it.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok();
+            return Ok("Database seeded");
         }
     }
 }

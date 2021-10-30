@@ -480,3 +480,4 @@ lint/tmp/
 *.hprof
 
 package-lock.json
+track-it/track-it/ClientApp/package-lock.json

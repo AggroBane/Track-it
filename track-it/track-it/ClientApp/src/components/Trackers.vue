@@ -1,44 +1,147 @@
 <template>
-  <div>
-    <nav class="navbar navbar-light light-blue lighten-4">
-        <div id="accordion">
-            <div class="card">
-                <div class="card-header" id="headingOne">
-                    <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Collapsible Group Item #1
-                    </button>
-                    </h5>
-                </div>
-            </div>
-        </div>
-    <li v-for="tracker in trackers" in items :key="tracker.id">
-          
-    </li>
-    </nav>
+<div v-for="tracker in trackers" :key="tracker.id">
+  <button @click="listClick($event)" class="accordion">Tracker {{tracker.name}}</button>
+  <div class="panel">
+    <div class="divimg">
+    <img class="flex-item" style="float:left; width:300px; height:300px;" :src="tracker.img">
+    <div class="flex-item" style="text-align:left">
+      <p>id: {{tracker.id}}</p>
+      <p>Name: {{tracker.name}}</p>
+      <p>Last tracked at: {{tracker.last_update}}</p>
+      <p>Coordinates: (
+        <router-link class="no-style" :to="{ name: 'Map', query:{trackerId: tracker.id}}">
+            <span class="lat">{{tracker.lat}}</span>, 
+            <span class="lng">{{tracker.lng}}</span>
+        </router-link>
+        )
+      </p>
+    </div>
+    </div>
+     <router-link class="no-style" :to="{ name: 'Map', query:{trackerId: tracker.id}}">
+    <img class="flex-item" :src="'https://www.mapquestapi.com/staticmap/v5/map?'+
+      'key=FajS1lvGMdqN1HyNfTrdiAM8KIQziNqr&'+
+      'center=' + tracker.lat + ',' + tracker.lng + 
+      '&zoom=12&size=1200,800&'+
+      'locations=' + tracker.lat + ',' + tracker.lng + '|marker-lg-red'
+      "> </router-link>
   </div>
+</div>
+<hr style="margin: 0px;">
 </template>
 
-<script>
+<style>
+.imgTracker {
+  float:left; 
+  width:300px; 
+  height:300px;
+}
+.divimg {
+  display:flex; 
+  flex-wrap:nowrap;
+}
+.flex-item{
+  margin:10px;
+}
+img.flex-item{
+  width:400px; 
+  height:300px;
+}
 
-export default {
-  name: 'Trackers',
-  data() {
-    return {
-        trackers: [
-            { tracker1: {
-              id:1,
-              name:"mon chien",
-              img: "https://static.wikia.nocookie.net/dogelore/images/9/97/Doge.jpg"
-            }},
-            { tracker2: {
-              id:2,
-              name:"mon chat",
-              img: "https://cdn.vox-cdn.com/thumbor/MfAL89LfeltyZgd9Ra8C2iBjq3U=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/19539772/cats4.jpg"
-            }}
+.no-style {
+  text-decoration: none;
+}
+
+.lat {
+  color: red;
+}
+
+.lng {
+  color: blue;
+}
+
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: center;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .accordion:hover {
+  background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  display:flex;
+  justify-content: center;
+  flex-wrap:nowrap;
+  padding: 0 18px;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+@media screen and (max-width:950px){
+  .panel {
+    flex-wrap: wrap;
+    justify-content: left;
+  }
+}
+
+@media screen and (max-width:600px){
+  .panel {
+  flex-wrap: wrap;
+  justify-content: center;
+  }
+  .divimg {
+  flex-wrap:wrap;
+  justify-content: center;
+  }
+}
+</style>
+
+<script>
+  export default {
+    name:"Trackers",
+    data() {
+      return {
+        trackers: [{
+            id:"marker1",
+            name:"mon chien",
+            img: "https://static.wikia.nocookie.net/dogelore/images/9/97/Doge.jpg",
+            last_update:new Date(),
+            lat: 46.6120085, 
+            lng: -71.1074071
+          },
+          { 
+            id:"marker2",
+            name:"mon chat",
+            img: "https://cdn.vox-cdn.com/thumbor/MfAL89LfeltyZgd9Ra8C2iBjq3U=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/19539772/cats4.jpg",
+            last_update:new Date(),
+            lat: 47.6120085, 
+            lng: -70.1074071
+          }
         ]
+      }
+    },
+    methods: {
+      listClick: function (event) {
+          console.log(event.target);
+          event.target.classList.toggle("active");
+          var panel = event.target.nextElementSibling;
+          if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+          } else {
+            panel.style.maxHeight = "800px";
+          }
+      },
     }
   }
-
-}
 </script>
