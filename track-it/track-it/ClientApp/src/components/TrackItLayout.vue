@@ -23,16 +23,16 @@ export default {
     // TODO poke backend to populate trackers
   },
   methods: {
-    async fetchAssets() {
-      try {
-          let axiosResponse = await axios.get(`/asset/${this.$store.state.currentUser}`);
-          
-            this.$store.state.dev_env ? this.$toast.success('Fetched assets') : this.$toast.error('aaaaaaas');
-            this.$store.commit('setTrackers', axiosResponse.data);
-      } catch (e) {
+    fetchAssets() {
+      axios.get(`/user/${this.$store.state.currentUser}/assets`)
+          .then((response) => {
+            this.$store.state.dev_env ? this.$toast.success('Fetched assets') : '';
+            this.$store.commit('setTrackers', response.data);
+          })
+          .catch(() => {
             this.$toast.error('Something went wrong fetching assets');
-          }
+          })
+      }
     }
-  }
 }
 </script>
