@@ -11,9 +11,9 @@
       <Marker v-for="point in Object.values(manyPoints)" :key="point.id" :options="{position: point.tracker}"
               @click="markerClicked(point.id)"/>
     </GoogleMap>
-    <SmolPopup v-if="showDetails"
-               :asset="mapCenterPoint"
-               style="position: fixed; top: 40%; left: 50%; z-index: 3; transform: translate(-50%, -50%);"/>
+    <MarkerPopup v-if="showDetails"
+                 :asset="mapCenterPoint"
+                 style="position: fixed; top: 40%; left: 50%; z-index: 3; transform: translate(-50%, -50%);"/>
   </div>
 </template>
 
@@ -30,10 +30,10 @@
 <script>
 import {GoogleMap, Marker} from "vue3-google-map";
 import $ from 'jquery';
-import SmolPopup from "./SmolPopup";
+import MarkerPopup from "./MarkerPopup";
 
 export default {
-  name: "Maps", components: {SmolPopup, GoogleMap, Marker},
+  name: "Maps", components: {MarkerPopup, GoogleMap, Marker},
   data() {
     return {
       mapCenterPoint: {tracker: {lat: 46.6120085, lng: -71.1074071}},
@@ -42,12 +42,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.manyPoints.trackers);
-    if(this.$route.query.reload === "true")
-    {
-        let url= window.location.href.replace("reload=true", "");
-        window.location.replace(url);
-    }
     if (this.$store.state.dev_env && Object.keys(this.manyPoints).length === 0) {
       this.$store.commit('setTrackers', [
         {tracker: {lat: 46.6120085, lng: -71.1074071}, id: "marker1"},
@@ -59,20 +53,19 @@ export default {
       this.$toast.info('State was empty, populating map with random markers');
     }
 
-    if(this.$route.query.trackerId && this.manyPoints[this.$route.query.trackerId])
-    {
-      this.markerClicked(this.$route.query.trackerId);
-    }
+    setTimeout(() => {
+      if (this.$route.query.trackerId && !!this.manyPoints[this.$route.query.trackerId]) {
+        this.markerClicked(this.$route.query.trackerId);
+      }
+    }, 100);
   },
   methods: {
     markerClicked(markerName) {
       //Reset the variables
       this.mapCenterPoint = {tracker: {lat: 0, lng: 0}};
       this.zoom = 0;
-      this.$router.push({ path: 'Map', query: { trackerId: markerName }});
 
       this.$nextTick(() => {
-        console.log('tesst');
         this.mapCenterPoint = this.manyPoints[markerName];
         this.zoom = 9;
 
