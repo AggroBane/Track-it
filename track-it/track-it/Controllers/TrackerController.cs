@@ -57,7 +57,8 @@ namespace track_it.Controllers
             return Created("tracker/" + tracker.Id, tracker);
         }
 
-        [HttpPost("")]
+        [HttpPost]
+        [Route("updatePosition")]
         public async Task<IActionResult> GetDataFromOyster()
         {
             try
