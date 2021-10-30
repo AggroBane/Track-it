@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using track_it.Data;
 using track_it.Entities;
 
 namespace track_it.Controllers
 {
     [ApiController]
-    [Route("/[controller]")]
+    [Route("[controller]")]
     public class AssetController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -21,7 +22,7 @@ namespace track_it.Controllers
         [Route("{userId}")]
         public List<Asset> Get([FromRoute] string userId)
         {
-            return _context.Assets.Where(x => x.UserId == userId).ToList();
+            return _context.Assets.Where(x => x.UserId == userId).Include(x => x.Tracker).Include(x => x.User).ToList();
         }
     }
 }
