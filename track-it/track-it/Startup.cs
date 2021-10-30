@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using track_it.Data;
-using VueCliMiddleware;
 
 namespace track_it
 {
@@ -24,41 +23,35 @@ namespace track_it
             services.AddDbContext<AppDbContext>(options =>
                 options.UseInMemoryDatabase("track-it"));
             services.AddControllers();
+
+
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp";
+                configuration.RootPath = "ClientApp/dist";
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
 
             app.UseRouting();
-            app.UseSpaStaticFiles();
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
             });
 
+            app.UseSpaStaticFiles();
             app.UseSpa(spa =>
             {
-                if (env.IsDevelopment())
-                    spa.Options.SourcePath = "ClientApp/";
-                else
-                    spa.Options.SourcePath = "dist";
+                spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
-                {
-                    spa.UseVueCli(npmScript: "serve", 8080);
-                }
-
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
             });
         }
     }
