@@ -77,7 +77,7 @@ export default {
   },
   computed: {
     apiKey() {
-      return process.env.VUE_APP_GOOGLE_API_KEY;
+      return "AIzaSyA60EGif9CSjhW_koDfNNIZM2QSsgL-pM0";
     },
     myheight() {
       return $(window).height() + 'px';
