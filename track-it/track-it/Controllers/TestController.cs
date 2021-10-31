@@ -45,13 +45,31 @@ namespace track_it.Controllers
                 Lng = -70.1074071,
                 LastPingUtc = DateTime.UtcNow
             };
+
+            var tracker2 = new Tracker()
+            {
+                Id = "10397109101114",
+                Lat = 40.6122032,
+                Lng = -72.1084072,
+                LastPingUtc = DateTime.UtcNow
+            };
             await _dbContext.Trackers.AddAsync(tracker);
+            await _dbContext.Trackers.AddAsync(tracker2);
 
             await _dbContext.Assets.AddAsync(new Asset()
             {
                 Id = "Auto",
                 Type = AssetType.CAR,
                 Tracker = tracker,
+                User = user,
+                ImageUrl = ""
+            });
+
+            await _dbContext.Assets.AddAsync(new Asset()
+            {
+                Id = "Cell",
+                Type = AssetType.PHONE,
+                Tracker = tracker2,
                 User = user,
                 ImageUrl = ""
             });

@@ -28,6 +28,9 @@ namespace track_it.Controllers
             tracker.Lng = request.Lng;
             tracker.LastPingUtc = DateTime.UtcNow;
 
+            _context.Trackers.Update(tracker);
+            await _context.SaveChangesAsync();
+
             return Ok();
         }
     }

@@ -3,6 +3,7 @@
     <TrackerListItem v-for="asset in trackers" :key="asset.id" :asset="asset" :list-click="listClick"/>
     <hr style="margin: 0px;">
   </div>
+  <button @click="$router.push('AddTracker')" class="kc_fab_main_btn">+</button>
 </template>
 
 <style>
