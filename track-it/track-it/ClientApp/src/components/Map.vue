@@ -31,6 +31,7 @@
 import {GoogleMap, Marker} from "vue3-google-map";
 import $ from 'jquery';
 import MarkerPopup from "./MarkerPopup";
+import axios from "axios";
 
 export default {
   name: "Maps", components: {MarkerPopup, GoogleMap, Marker},
@@ -58,6 +59,8 @@ export default {
         this.markerClicked(this.$route.query.trackerId);
       }
     }, 100);
+
+    this.refreshTrackers();
   },
   methods: {
     markerClicked(markerName) {
@@ -73,6 +76,19 @@ export default {
           this.showDetails = true;
         }, 750);
       });
+    },
+    refreshTrackers() {
+      setTimeout(() => {
+        axios.get(`/user/${this.$store.state.currentUser}/assets`)
+            .then((response) => {
+              this.$toast.success('Assets refreshed');
+              this.$store.commit('setTrackers', response.data);
+            })
+            .catch(() => {
+              this.$toast.error('Something went wrong fetching assets');
+            });
+        this.refreshTrackers();
+      }, 30000);
     }
   },
   computed: {
