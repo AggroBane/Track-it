@@ -45,6 +45,7 @@ namespace track_it.Controllers
             };
 
             await _context.Assets.AddAsync(createdAsset);
+            await _context.SaveChangesAsync();
 
             return Created("asset/" + createdAsset.Id, createdAsset);
         }
