@@ -11,10 +11,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.StrictMode;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -36,20 +33,17 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FirstFragment extends Fragment {
     private final String username = "gamer";
@@ -250,8 +244,8 @@ public class FirstFragment extends Fragment {
     private void SendLocation() {
         if (loggedIn)
         {
-            final String latitude = String.valueOf(currentLocation.getLatitude());
-            final String longitude = String.valueOf(currentLocation.getLongitude());
+            final double latitude = currentLocation.getLatitude();
+            final double longitude = currentLocation.getLongitude();
 
             String deviceId = ""; // Currently generated from username
 
@@ -259,30 +253,32 @@ public class FirstFragment extends Fragment {
                 deviceId += String.valueOf((int)i);
             }
 
-            final String finalDeviceId = deviceId;
+            String postUrl = "http://track-it.aggroserver.tech/phone/" + deviceId;
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
-            Thread thread = new Thread(new Runnable() {
+            JSONObject postData = new JSONObject();
+
+            try {
+                postData.put("lat", latitude);
+                postData.put("lng", longitude);
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
                 @Override
-                public void run() {
-                    try  {
-                        String data = URLEncoder.encode("lat", "UTF-8") + "=" + URLEncoder.encode(latitude, "UTF-8");
-                        data += "&" + URLEncoder.encode("lmg", "UTF-8") + "=" + URLEncoder.encode(longitude, "UTF-8");
-
-                        URL url = new URL("http://track-it.aggroserver.tech/phone/" + finalDeviceId);
-
-                        URLConnection connection = url.openConnection();
-                        connection.setDoOutput(true);
-                        OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
-                        wr.write(data);
-                        wr.flush();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                public void onResponse(JSONObject response) {
+                    Log.i("response", "response success");
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                   // "Handles error"
                 }
             });
 
-            thread.start();
+            requestQueue.add(jsonObjectRequest);
         }
     }
 }
