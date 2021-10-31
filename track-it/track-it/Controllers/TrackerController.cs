@@ -61,6 +61,7 @@ namespace track_it.Controllers
             if (isExisting) return BadRequest();
 
             await _context.Trackers.AddAsync(tracker);
+            await _context.SaveChangesAsync();
 
             return Created("tracker/" + tracker.Id, tracker);
         }
