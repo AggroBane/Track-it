@@ -1,7 +1,10 @@
-﻿import { createWebHistory, createRouter } from "vue-router";
+﻿import {createWebHistory, createRouter} from "vue-router";
 import Home from "@/components/Home.vue";
-import Counter from "@/components/Counter.vue";
-import FetchData from "@/components/FetchData.vue";
+import Map from "@/components/Map.vue";
+import TrackItLayout from "../components/TrackItLayout";
+import Trackers from "../components/Trackers";
+import AddStuff from "../components/AddStuff";
+import AddTracker from "../components/AddTracker";
 
 const routes = [
     {
@@ -10,14 +13,29 @@ const routes = [
         component: Home,
     },
     {
-        path: "/Counter",
-        name: "Counter",
-        component: Counter,
+        path: "/Map",
+        name: "Map",
+        component: Map,
     },
     {
-        path: "/FetchData",
-        name: "FetchData",
-        component: FetchData,
+        path: "/Trackers",
+        name: "Trackers",
+        component: Trackers,
+    },
+    {
+        path: "/trackit",
+        name: "TrackItApp",
+        component: TrackItLayout
+    },
+    {
+        path: "/AddTracker",
+        name: "AddTracker",
+        component: AddTracker
+    },
+    {
+        path: "/AddStuff",
+        name: "AddStuff",
+        component: AddStuff
     }
 ];
 

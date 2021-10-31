@@ -1,36 +1,12 @@
 <template>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand">Vue JS Template for .NET 5</a>
-                <button class="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target=".navbar-collapse"
-                        aria-label="Toggle navigation"
-                        @click="toggle">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-                     v-bind:class="{show: isExpanded}">
-                    <ul class="navbar-nav flex-grow">
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'Home' }" class="nav-link text-dark">Home</router-link>
-                           
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'Counter' }" class="nav-link text-dark">Counter</router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'FetchData' }" class="nav-link text-dark">Fetch Data</router-link>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <Reveal>
+            <router-link :to="{ name: 'Home' }" class="nav-link">Home</router-link>
+            <router-link :to="{ name: 'Map' }" class="nav-link">Map</router-link>
+            <router-link :to="{ name: 'Trackers' }" class="nav-link">Trackers</router-link>
+        </Reveal>
     </header>
 </template>
-
 
 <style>
     a.navbar-brand {
@@ -38,24 +14,42 @@
         text-align: center;
         word-break: break-all;
     }
-
-    html {
-        font-size: 14px;
+    .bm-burger-button {
+        position: absolute;
+        z-index:10;
+        width: 36px;
+        height: 30px;
+        left: 25px;
+        top: 20px;
+        cursor: pointer;
+    }
+    .bm-burger-button:hover {
+        filter: brightness(175%);
+    }
+    .bm-cross-button {
+        margin-right:25%;
+        padding-top:3%;
+        padding-left:40%;
+        padding-right:3%;
+        width:50%;
+        transform:scale(2)
+    }
+    .bm-cross-button:hover {
+        filter: brightness(75%);
+    }
+    .bm-menu {
+        padding-top:50px;
     }
 
-    @media (min-width: 768px) {
-        html {
-            font-size: 16px;
-        }
-    }
-
-    .box-shadow {
-        box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-    }
 </style>
 <script>
+    import { Reveal } from 'vue3-burger-menu'  // import the CSS transitions you wish to use, in this case we are using `Slide`
+
     export default {
         name: "NavMenu",
+        components: {
+            Reveal // Register your component
+        },
         data() {
             return {
                 isExpanded: false

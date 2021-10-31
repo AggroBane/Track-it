@@ -8,5 +8,6 @@ services:
       dockerfile: track-it/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     ports:
-      - 5000:80
+      - 80:80

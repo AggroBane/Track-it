@@ -5,7 +5,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>56a81413-0f9d-4968-abe4-9e5faa5d9ffa</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
+    <DockerServiceUrl>{Scheme}://localhost:5000</DockerServiceUrl>
     <DockerServiceName>track-it</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
