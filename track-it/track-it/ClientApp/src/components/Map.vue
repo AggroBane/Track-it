@@ -1,13 +1,14 @@
 <template>
   <div>
+    <button style="position: fixed; top:10%; left: 10%; z-index: 5;" @click="refreshTrackers">Refresh</button>
     <GoogleMap id="map"
                :api-key="apiKey"
                :center="mapCenterPoint.tracker"
-               :scrollwheel="false"
                :style="{height: myheight}"
                :zoom="zoom"
                style="width: 100%;"
-               @mousedown="showDetails = false">
+               @mousedown="showDetails = false"
+               @zoom_changed="showDetails = false">
       <Marker v-for="point in Object.values(manyPoints)" :key="point.id" :options="{position: point.tracker}"
               @click="markerClicked(point.id)"/>
     </GoogleMap>
@@ -31,6 +32,7 @@
 import {GoogleMap, Marker} from "vue3-google-map";
 import $ from 'jquery';
 import MarkerPopup from "./MarkerPopup";
+import axios from "axios";
 
 export default {
   name: "Maps", components: {MarkerPopup, GoogleMap, Marker},
@@ -58,6 +60,8 @@ export default {
         this.markerClicked(this.$route.query.trackerId);
       }
     }, 100);
+
+    this.autoRefreshTrackers();
   },
   methods: {
     markerClicked(markerName) {
@@ -73,6 +77,22 @@ export default {
           this.showDetails = true;
         }, 750);
       });
+    },
+    autoRefreshTrackers() {
+      setTimeout(() => {
+        this.refreshTrackers();
+        this.autoRefreshTrackers();
+      }, 30000);
+    },
+    refreshTrackers() {
+      axios.get(`/user/${this.$store.state.currentUser}/assets`)
+          .then((response) => {
+            this.$toast.success('Assets refreshed');
+            this.$store.commit('setTrackers', response.data);
+          })
+          .catch(() => {
+            this.$toast.error('Something went wrong fetching assets');
+          });
     }
   },
   computed: {
