@@ -29,9 +29,9 @@ namespace track_it.Controllers
 
         [HttpGet]
         [Route("")]
-        public List<Tracker> GetAll()
+        public async Task<List<Tracker>> GetAll()
         {
-            return _context.Trackers.ToList();
+            return await _context.Trackers.ToListAsync();
         }
 
         [HttpDelete]
