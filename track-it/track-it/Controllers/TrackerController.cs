@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using track_it.Data;
 using track_it.Entities;
 
@@ -30,6 +27,13 @@ namespace track_it.Controllers
             return _context.Trackers.Where(x => x.Id == serialId).ToList();
         }
 
+        [HttpGet]
+        [Route("")]
+        public List<Tracker> GetAll([FromRoute] string serialId)
+        {
+            return _context.Trackers.ToList();
+        }
+
         [HttpDelete]
         [Route("{serialId}")]
         public async Task<IActionResult> Delete([FromRoute] string serialId)
@@ -51,6 +55,10 @@ namespace track_it.Controllers
         public async Task<IActionResult> Create([FromBody] Tracker tracker)
         {
             if (tracker == null) return BadRequest();
+            if (tracker.Id == null) return BadRequest();
+
+            var isExisting = await _context.Trackers.AnyAsync(x => x.Id == tracker.Id);
+            if (isExisting) return BadRequest();
 
             await _context.Trackers.AddAsync(tracker);
 
@@ -59,33 +67,24 @@ namespace track_it.Controllers
 
         [HttpPost]
         [Route("updatePosition")]
-        public async Task<IActionResult> GetDataFromOyster()
+        public async Task<IActionResult> GetDataFromOyster([FromBody] OysterPayload payload)
         {
-            try
-            {
-                string rawPayload = null;
-                using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-                {
-                    rawPayload = await reader.ReadToEndAsync();
-                }
+            var serialNo = payload.SerNo?.ToString() ?? "";
 
-                var payload = JsonConvert.DeserializeObject<OysterPayload>(rawPayload);
-                var serialNo = payload.SerNo?.ToString() ?? "";
+            var associatedTracker = await _context.Trackers.FirstOrDefaultAsync(x => x.Id == serialNo);
+            if (associatedTracker == null) return BadRequest();
 
-                var associatedTracker = _context.Trackers.FirstOrDefault(x => x.Id == serialNo);
-                var firstField = payload.Records.FirstOrDefault()?.Fields.FirstOrDefault();
-                if (associatedTracker == null || firstField == null) return BadRequest();
+            var firstField = payload.Records.FirstOrDefault()?.Fields.FirstOrDefault();
+            if (firstField == null) return BadRequest();
 
-                associatedTracker.LastPingUtc = DateTime.UtcNow;
-                associatedTracker.Lat = firstField.Lat ?? 0;
-                associatedTracker.Lng = firstField.Long ?? 0;
+            associatedTracker.LastPingUtc = DateTime.UtcNow;
+            associatedTracker.Lat = firstField.Lat ?? 0;
+            associatedTracker.Lng = firstField.Long ?? 0;
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            _context.Trackers.Update(associatedTracker);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
