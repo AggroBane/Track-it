@@ -1,13 +1,14 @@
 <template>
   <div>
+    <button style="position: fixed; top:10%; left: 10%; z-index: 5;" @click="refreshTrackers">Refresh</button>
     <GoogleMap id="map"
                :api-key="apiKey"
                :center="mapCenterPoint.tracker"
-               :scrollwheel="false"
                :style="{height: myheight}"
                :zoom="zoom"
                style="width: 100%;"
-               @mousedown="showDetails = false">
+               @mousedown="showDetails = false"
+               @zoom_changed="showDetails = false">
       <Marker v-for="point in Object.values(manyPoints)" :key="point.id" :options="{position: point.tracker}"
               @click="markerClicked(point.id)"/>
     </GoogleMap>
@@ -60,7 +61,7 @@ export default {
       }
     }, 100);
 
-    this.refreshTrackers();
+    this.autoRefreshTrackers();
   },
   methods: {
     markerClicked(markerName) {
@@ -77,18 +78,21 @@ export default {
         }, 750);
       });
     },
-    refreshTrackers() {
+    autoRefreshTrackers() {
       setTimeout(() => {
-        axios.get(`/user/${this.$store.state.currentUser}/assets`)
-            .then((response) => {
-              this.$toast.success('Assets refreshed');
-              this.$store.commit('setTrackers', response.data);
-            })
-            .catch(() => {
-              this.$toast.error('Something went wrong fetching assets');
-            });
         this.refreshTrackers();
+        this.autoRefreshTrackers();
       }, 30000);
+    },
+    refreshTrackers() {
+      axios.get(`/user/${this.$store.state.currentUser}/assets`)
+          .then((response) => {
+            this.$toast.success('Assets refreshed');
+            this.$store.commit('setTrackers', response.data);
+          })
+          .catch(() => {
+            this.$toast.error('Something went wrong fetching assets');
+          });
     }
   },
   computed: {
