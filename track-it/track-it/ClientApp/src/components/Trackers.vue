@@ -3,14 +3,14 @@
     <TrackerListItem v-for="asset in trackers" :key="asset.id" :asset="asset" :list-click="listClick"/>
     <hr style="margin: 0px;">
   </div>
-  <button @click="$router.push('AddTracker')" class="kc_fab_main_btn">+</button>
+  <button class="kc_fab_main_btn" @click="$router.push('AddStuff')">+</button>
 </template>
 
 <style>
 .kc_fab_main_btn {
-  position: fixed; 
+  position: fixed;
   right: 5%;
-  bottom:5vh;
+  bottom: 5vh;
   background-color: #F44336;
   width: 60px;
   height: 60px;
@@ -24,6 +24,7 @@
   transition: .3s;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
 .imgTracker {
   float: left;
   width: 300px;

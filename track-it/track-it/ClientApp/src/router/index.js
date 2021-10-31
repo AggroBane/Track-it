@@ -1,8 +1,9 @@
-﻿import { createWebHistory, createRouter } from "vue-router";
+﻿import {createWebHistory, createRouter} from "vue-router";
 import Home from "@/components/Home.vue";
 import Map from "@/components/Map.vue";
 import TrackItLayout from "../components/TrackItLayout";
 import Trackers from "../components/Trackers";
+import AddStuff from "../components/AddStuff";
 import AddTracker from "../components/AddTracker";
 
 const routes = [
@@ -30,6 +31,11 @@ const routes = [
         path: "/AddTracker",
         name: "AddTracker",
         component: AddTracker
+    },
+    {
+        path: "/AddStuff",
+        name: "AddStuff",
+        component: AddStuff
     }
 ];
 
