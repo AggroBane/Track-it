@@ -29,7 +29,7 @@ namespace track_it.Controllers
 
         [HttpGet]
         [Route("")]
-        public List<Tracker> GetAll([FromRoute] string serialId)
+        public List<Tracker> GetAll()
         {
             return _context.Trackers.ToList();
         }
